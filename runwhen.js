@@ -1,7 +1,6 @@
 /* 
-	RunWhen 
-		- Javascript code dependency checker
-	
+	Run When JS
+		- Javascript code dependency checker	
 	See: https://github.com/rafaelgandi/RunWhen
 	LM: 09-30-12 
 	Version: 0.1
