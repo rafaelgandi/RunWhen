@@ -2,11 +2,12 @@
 	Run When JS
 		- Javascript code dependency checker	
 	See: https://github.com/rafaelgandi/RunWhen
-	LM: 09-30-12 
-	Version: 0.1
+	LM: 10-09-14 
+	Version: 0.2
  */
 var runwhen = (function (self) {
 	var cachedChecks = {},
+		TIMEOUT = 800,
 		check = function (_checks) {
 			var i = _checks.length;
 			while (i--) {
@@ -25,8 +26,11 @@ var runwhen = (function (self) {
 		(function loop () {
 			if (check(_checks)) { _run.call(self); }
 			else {
-				// After 200 checks, call callback function //
-				if (CHECK_DURATION > 200) { _run.call(self); return; }
+				// After 800 checks throw an exception //
+				if (CHECK_DURATION > TIMEOUT) { 
+					throw 'RunWhen timeout reached for ['+_checks.join(', ')+']';
+					return; 
+				}
 				CHECK_DURATION++;
 				self.setTimeout(loop, 10);
 			}
