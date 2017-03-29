@@ -2,10 +2,12 @@
 	Run When JS
 		- Javascript code dependency checker	
 	See: https://github.com/rafaelgandi/RunWhen
-	LM: 10-09-14 
-	Version: 0.2
+	LM: 2017-03-29
+	Version: 0.3
  */
 var runwhen = (function (self) {
+	// See: https://www.nczonline.net/blog/2012/03/13/its-time-to-start-using-javascript-strict-mode/
+	"use strict";
 	var cachedChecks = {},
 		TIMEOUT = 800,
 		check = function (_checks) {
