@@ -2,7 +2,7 @@ title: Runwhen
 description: Javascript code dependency checker.
 google_analytics: 
 show_downloads: true
-theme: jekyll-theme-minimal
+theme: jekyll-theme-cayman
 
 gems:
   - jekyll-mentions
