@@ -16,8 +16,13 @@ runwhen('jQuery', function () {
 	$.getScript('js/Ttow.js');
 });
 
-
-runwhen(['Ttow.Browser', 'jQuery.fn.datepicker', '$.jxdomain', 'jQuery.fn.jrumble'], function () {
+// Preferred method of using to avoid eval. Pass a function as the first argument. The function should return either 
+// true or false. 
+runwhen(function () {
+	try {
+		return Ttow && Ttow.Browser && jQuery.fn.datepicker && $.jxdomain && jQuery.fn.jrumble;
+	} catch (e) { return false; }
+}, function () {
 	console.log(typeof Ttow.Browser + ' - Ttow.Browser');
 	console.log(typeof jQuery.fn.datepicker + ' - jQuery.fn.datepicker');
 	console.log(typeof $.jxdomain + ' - $.jxdomain');

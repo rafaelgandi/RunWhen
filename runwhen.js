@@ -2,8 +2,8 @@
 	Run When JS
 		- Javascript code dependency checker	
 	See: https://github.com/rafaelgandi/RunWhen
-	LM: 2017-03-29
-	Version: 0.3
+	LM: 2017-04-12
+	Version: 1.0
  */
 var runwhen = (function (self) {
 	// See: https://www.nczonline.net/blog/2012/03/13/its-time-to-start-using-javascript-strict-mode/
@@ -23,10 +23,14 @@ var runwhen = (function (self) {
 			return !0;
 		};
 	return function (_checks, _run) {	
-		var CHECK_DURATION = 1;
-		if (! (_checks instanceof Array)) { _checks = [_checks]; } // Force _checks to be array
+		var CHECK_DURATION = 1,
+			IS_FUNCTION_PASSED = typeof _checks === 'function';
+		if (! IS_FUNCTION_PASSED) {
+			if (! (_checks instanceof Array)) { _checks = [_checks]; } // Force _checks to be array	
+		}
 		(function loop () {
-			if (check(_checks)) { _run.call(self); }
+			var checking = (! IS_FUNCTION_PASSED) ? check(_checks) : _checks.call(self);
+			if (checking) { _run.call(self); }
 			else {
 				// After 800 checks throw an exception //
 				if (CHECK_DURATION > TIMEOUT) { 
@@ -35,7 +39,7 @@ var runwhen = (function (self) {
 				}
 				CHECK_DURATION++;
 				self.setTimeout(loop, 10);
-			}
+			}			
 		})();
 	};
 })(self);
