@@ -14,6 +14,10 @@ Example Usage:
 ==============
 Passing a function as the first argument. [Preferred method]:fireworks:
 ```javascript
+	$.getScript('js/jquery-ui.min.js');
+	$.getScript('js/jquery.jxdomain.js');
+	$.getScript('js/jquery.jrumble.1.3.min.js');
+	$.getScript('js/Ttow.js');
 	// Preferred method of using to avoid eval. Pass a function as the first argument. The function should return either 
 	// true or false. 
 	runwhen(function () {
