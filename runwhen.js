@@ -28,6 +28,7 @@ var runwhen = (function (self) {
 		if (! IS_FUNCTION_PASSED) {
 			if (! (_checks instanceof Array)) { _checks = [_checks]; } // Force _checks to be array	
 		}
+		// See: https://www.paulirish.com/2008/best-practice-poll-instead-of-a-settimeout-hack/
 		(function loop () {
 			var checking = (! IS_FUNCTION_PASSED) ? check(_checks) : _checks.call(self);
 			if (checking) { _run.call(self); }
