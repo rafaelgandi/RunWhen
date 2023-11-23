@@ -1,46 +1,33 @@
 /* 
-	Run When JS
-		- Javascript code dependency checker	
-	See: https://github.com/rafaelgandi/RunWhen
-	LM: 2022-02-09
-	Version: 1.1
- */
-export default (function (self) {
-	let cachedChecks = {},
-		TIMEOUT = 800,
-		check = function (_checks) {
-			let i = _checks.length;
-			while (i--) {
-				if (!! cachedChecks[_checks[i]]) { continue; } // Check cache, try to avoid eval()
-				try {
-                    // DEPRECATED: Dont use runwhen like this. Always pass a function as the first parameter.
-					eval('if(typeof '+_checks[i]+' === \'undefined\'){throw \'e\';}');
-					cachedChecks[_checks[i]] = !0;
-				} 
-				catch (e) { return !1; }	
-			}	
-			return !0;
-		};
-	return function (_checks, _run, _suppressTimeoutError) {	
-		let CHECK_DURATION = 1,
-			IS_FUNCTION_PASSED = typeof _checks === 'function';
-		if (! IS_FUNCTION_PASSED) {
-			if (! (_checks instanceof Array)) { _checks = [_checks]; } // Force _checks to be array	
-		}
-		(function loop () {
-			let checking = (! IS_FUNCTION_PASSED) ? check(_checks) : _checks.call(self);
-			if (checking) { _run.call(self); }
-			else {
-				// After 800 checks throw an exception //
-				if (CHECK_DURATION > TIMEOUT) { 
-					if (! _suppressTimeoutError) {
-						throw new Error('RunWhen timeout reached');
-					}					
-					return; 
-				}
-				CHECK_DURATION++;
-				setTimeout(loop, (1000 / 60));
-			}			
-		})();
-	};
-})(window);
+    Run When JS
+    - Javascript code dependency checker	
+    See: https://github.com/rafaelgandi/RunWhen
+    
+    LM: 2023-11-23 06:09:48
+    Version: 2
+*/
+
+const runwhen = (() => {
+    return (checkerFn, timeout = 30e3) => {
+        if (typeof checkerFn !== 'function') {
+            throw new Error(`RunWhen: Checker function needs to be a function that returns a boolean.`);
+        }
+        const startTime = new Date().getTime();
+        const endTime = startTime + timeout;
+        return new Promise((resolve, reject) => {
+            (function poll() {
+                if (new Date().getTime() >= endTime) {
+                    reject(`RunWhen: Timeout happend. Source: [${checkerFn.toString()}].`);
+                    return;
+                }
+                if (!checkerFn?.()) {
+                    requestAnimationFrame(poll);
+                    return;
+                }
+                resolve();
+            })();
+        });
+    };
+})();
+
+export default runwhen;
